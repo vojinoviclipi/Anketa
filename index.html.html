@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poziv na kafu ili ručak</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top, #f9fafb, #eef1f6);
+  min-height: 100vh;
+  overflow: hidden;
+  color: #1f2937;
+}
+
+/* LEPTIRI */
+.butterfly {
+  position: fixed;
+  width: 60px;
+  opacity: 0.25;
+  pointer-events: none;
+  animation: drift linear infinite;
+}
+
+@keyframes drift {
+  from { transform: translate(0,0); }
+  to { transform: translate(var(--dx), var(--dy)); }
+}
+
+/* LAYOUT */
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 440px;
+  padding: 28px 26px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  text-align: center;
+  z-index: 10;
+}
+
+/* STEP */
+.step {
+  display: none;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.step.active {
+  display: block;
+  animation: stepIn 0.5s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes stepIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* TYPO */
+h2 { font-size: 22px; margin-bottom: 18px; }
+h3 { font-size: 18px; margin-bottom: 14px; }
+h4 { font-size: 15px; margin: 10px 0; font-weight: 600; }
+
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 8px 0;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+button:active { transform: scale(0.98); }
+
+button:not(.secondary) {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #fff;
+  box-shadow: 0 10px 20px rgba(37,99,235,0.35);
+}
+
+button:not(.secondary):hover {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+}
+
+.secondary {
+  background: #f1f5f9;
+  color: #1f2937;
+}
+
+.secondary:hover { background: #e5eaf0; }
+
+/* SELECT */
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+}
+
+/* ACCORDION */
+.section {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: inset 0 0 0 1px #e5e7eb;
+  text-align: left;
+  animation: accordionIn 0.35s ease;
+}
+
+@keyframes accordionIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.option {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.option input { margin-right: 6px; }
+
+.option a {
+  margin-left: 6px;
+  font-size: 13px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* TEXTAREA */
+textarea {
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  resize: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LEPTIRI -->
+<script>
+const butterflyCount = 56;
+for (let i = 0; i < butterflyCount; i++) {
+  const angle = Math.random() * 2 * Math.PI;
+  const dx = Math.cos(angle) * 120;
+  const dy = Math.sin(angle) * 120;
+
+  document.write(`
+    <img src="leptir.png" class="butterfly"
+      style="
+        top:${Math.random()*100}%;
+        left:${Math.random()*100}%;
+        --dx:${dx}vw;
+        --dy:${dy}vh;
+        animation-duration:${90 + Math.random()*40}s;
+      ">
+  `);
+}
+</script>
+
+<div class="wrapper">
+  <div class="card">
+
+    <div id="step1" class="step active">
+      <h2>Da li raspoložena da izađeš sa mnom ove nedelje na piće ili večeru?☺️</h2>
+      <button onclick="answer('Da')">Da</button>
+      <button class="secondary" onclick="answer('Ne')">Ne</button>
+    </div>
+
+    <div id="step2" class="step">
+      <h3>Koji dan ti najviše odgovara?</h3>
+      <select id="day">
+        <option>Ponedeljak</option>
+        <option>Utorak</option>
+        <option>Sreda</option>
+        <option>Četvrtak</option>
+        <option>Petak</option>
+      </select>
+      <button onclick="nextStep()">Dalje</button>
+    </div>
+
+    <div id="step3" class="step">
+      <h3>Izaberi vrstu mesta</h3>
+
+      <button class="secondary" onclick="toggleSection('kafic')">☕ Kafići</button>
+      <button class="secondary" onclick="toggleSection('restoran')">🍽 Restorani</button>
+      <button class="secondary" onclick="toggleSection('picerija')">🍕 Picerije</button>
+
+      <div id="sections"></div>
+
+      <textarea id="predlog"
+        placeholder="Ti možeš predložiti nešto drugo..."
+        rows="3"
+        oninput="checkFinishVisibility()"></textarea>
+
+      <button id="finishBtn" onclick="finish()" style="display:none">
+        Završi
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+emailjs.init("9l5rh_uOr9onl3Z-Y");
+
+let result = {};
+let selectedPlace = "";
+let openSections = {};
+
+const locations = {
+  kafic: [
+    ["Kafeterija Fontana","https://maps.app.goo.gl/FSLNB2UZPP8n2JGt5"],
+    ["Voulez-vous","https://maps.app.goo.gl/Zs6TKub1mgeKqEhm6"]
+  ],
+  restoran: [
+    ["Durmitor","https://maps.app.goo.gl/TypmyoXyiCQU7Wtv6"],
+    ["Milky","https://maps.app.goo.gl/8u4hUeLdapRCSxT19"],
+    ["Mamagayo","https://maps.app.goo.gl/cjnhWabUYBGbvtDV9"]
+  ],
+  picerija: [
+    ["Pizza Bar","https://maps.app.goo.gl/RuUrapsaFnpSRRSS8"],
+    ["Majstor i Margarita","https://maps.app.goo.gl/L39RkHQiEpSXjuoU8"],
+    ["Napoli Picerija","https://maps.app.goo.gl/Q1P4wWc4nYXT6t987"]
+  ]
+};
+
+function switchStep(from, to) {
+  document.getElementById(from).classList.remove("active");
+  document.getElementById(to).classList.add("active");
+}
+
+function answer(val) {
+  result.odgovor = val;
+  if (val === "Da") switchStep("step1","step2");
+  else {
+    result.dan = "-";
+    result.mesto = "-";
+    result.predlog = "-";
+    sendResult();
+  }
+}
+
+function nextStep() {
+  result.dan = document.getElementById("day").value;
+  switchStep("step2","step3");
+}
+
+function toggleSection(type) {
+  const container = document.getElementById("sections");
+
+  if (openSections[type]) {
+    openSections[type].remove();
+    delete openSections[type];
+  } else {
+    const section = document.createElement("div");
+    section.className = "section";
+    section.innerHTML = `<h4>${label(type)}</h4>`;
+
+    locations[type].forEach(p => {
+      section.innerHTML += `
+        <div class="option">
+          <input type="radio" name="place" value="${p[0]}"
+            onchange="selectedPlace='${p[0]}'">
+          ${p[0]}
+          <a href="${p[1]}" target="_blank">mapa</a>
+        </div>`;
+    });
+
+    openSections[type] = section;
+    container.appendChild(section);
+  }
+
+  checkFinishVisibility();
+}
+
+function label(type) {
+  if (type === "kafic") return "☕ Kafići";
+  if (type === "restoran") return "🍽 Restorani";
+  if (type === "picerija") return "🍕 Picerije";
+}
+
+function checkFinishVisibility() {
+  const textFilled =
+    document.getElementById("predlog").value.trim() !== "";
+
+  const hasSections =
+    Object.keys(openSections).length > 0;
+
+  document.getElementById("finishBtn").style.display =
+    (textFilled || hasSections) ? "block" : "none";
+}
+
+function finish() {
+  const text = document.getElementById("predlog").value.trim();
+
+  result.predlog = text !== "" ? text : "-";
+  result.mesto = selectedPlace ? selectedPlace : "-";
+
+  sendResult();
+}
+
+function sendResult() {
+  emailjs.send("service_wla37zd", "template_gjqzphl", result)
+    .then(() => {
+      document.querySelector(".card").innerHTML =
+        "<h2>Hvala ti na izdvojenom vremenu</h2><p>Vidimo se uskoro☺️.</p>";
+    });
+}
+</script>
+
+</body>
+</html>
