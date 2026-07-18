@@ -226,15 +226,17 @@ function switchStep(from,to){
 }
 
 function createButterflies(){
-  for(let i=0;i<40;i++){
+  for(let i=0;i<100;i++){
     const b=document.createElement("img");
     b.src="leptir.png";
     b.className="butterfly";
+    const size = 30 + Math.random() * 40;
+    b.style.width = size + "px";
     b.style.top=Math.random()*100+"%";
     b.style.left=Math.random()*100+"%";
-    b.style.setProperty("--dx",(Math.random()*200-100)+"vw");
-    b.style.setProperty("--dy",(Math.random()*200-100)+"vh");
-    b.style.animationDuration=(80+Math.random()*40)+"s";
+    b.style.setProperty("--dx",(Math.random()*400-200)+"vw");
+    b.style.setProperty("--dy",(Math.random()*400-200)+"vh");
+    b.style.animationDuration=(8+Math.random()*8)+"s";
     document.body.appendChild(b);
   }
 }
