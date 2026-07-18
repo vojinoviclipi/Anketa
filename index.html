@@ -303,9 +303,9 @@ function finish(){
 function sendResult(){
   emailjs.send("service_wla37zd","template_gjqzphl",result)
   .then(()=>{
-    document.querySelector(".card").innerHTML=
+    document.querySelector(".card").innerHTML=`
       <h2>Istraživanje uspešno završeno🎉</h2>
-      <p>Tim stručnjaka Vam se zahvaljuje na učešću u ovom veoma ozbiljnom projektu😊</p>;
+      <p>Tim stručnjaka Vam se zahvaljuje na učešću u ovom veoma ozbiljnom projektu😊</p>`;
   });
 }
 </script>
