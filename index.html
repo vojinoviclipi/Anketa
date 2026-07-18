@@ -155,7 +155,9 @@ textarea {
 
     <!-- STEP 1 -->
     <div id="step1" class="step">
-      <h2>Da li si raspoložena da izađeš sa mnom ove nedelje na piće ili večeru?☺️</h2>
+      <h2>Važno obaveštenje 📢</h2>
+      <p>Nakon detaljne analize, brojnih proračuna i konsultacija sa stručnim timom, došao sam do zaključka da bi jedno piće sa tobom bilo odlična ideja.😊</p>
+      <p>Da li si raspoložena da proverimo da li je istraživanje tačno?</p>
       <button onclick="answer('Da')">Da</button>
       <button class="secondary" onclick="answer('Ne')">Ne</button>
     </div>
@@ -204,16 +206,17 @@ let selectedPlace = "";
 let openSections = {};
 
 const locations = {
-  kafic: [
+  Kafici: [
     ["Kafeterija Fontana","https://maps.app.goo.gl/FSLNB2UZPP8n2JGt5"],
     ["Voulez-vous","https://maps.app.goo.gl/Zs6TKub1mgeKqEhm6"]
+    ["Kafeterija Family Cup","https://maps.app.goo.gl/Nu8RS29WqtcfaNHZ8"]
   ],
-  restoran: [
-    ["Durmitor","https://maps.app.goo.gl/TypmyoXyiCQU7Wtv6"],
+  Restorani: [
+    ["Smash Burgers","https://maps.app.goo.gl/TwLzapVxHddey6LJ8"],
     ["Milky","https://maps.app.goo.gl/8u4hUeLdapRCSxT19"],
     ["Mamagayo","https://maps.app.goo.gl/cjnhWabUYBGbvtDV9"]
   ],
-  picerija: [
+  Picerije: [
     ["Pizza Bar","https://maps.app.goo.gl/RuUrapsaFnpSRRSS8"],
     ["Majstor i Margarita","https://maps.app.goo.gl/L39RkHQiEpSXjuoU8"],
     ["Napoli Picerija","https://maps.app.goo.gl/Q1P4wWc4nYXT6t987"]
@@ -301,7 +304,8 @@ function sendResult(){
   emailjs.send("service_wla37zd","template_gjqzphl",result)
   .then(()=>{
     document.querySelector(".card").innerHTML=
-      "<h2>Hvala ti 😊</h2><p>Radujem se našem viđenju, hajde da pričamo 😉</p>";
+      <h2>Istraživanje uspešno završeno🎉</h2>
+      <p>Tim stručnjaka Vam se zahvaljuje na učešću u ovom veoma ozbiljnom projektu😊</p>";
   });
 }
 </script>
