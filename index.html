@@ -253,11 +253,21 @@ function fakeCaptchaCheck(){
 }
 
 function answer(val){
-  result.odgovor=val;
-  if(val==="Da") switchStep("step1","step2");
-  else{
-    result.dan="-"; result.mesto="-"; result.predlog="-";
-    sendResult();
+  if(val === "Da"){
+  result.odgovor = "Da";
+
+  const errorMsg = document.getElementById("errorMsg");
+  if(errorMsg){
+  errorMsg.style.display = "none";
+}
+
+  switchStep("step1","step2");
+  return;
+}
+
+  const errorMsg = document.getElementById("errorMsg");
+  if(errorMsg){
+  errorMsg.style.display = "block";
   }
 }
 
